@@ -1,26 +1,33 @@
 # YOLOcs
 Tích hợp YOLOv7 vào WinForm C# sử dụng OpenCV
 
-## Convert yolov7.pt to yolov7.onnx
-1. Clone code from: https://github.com/WongKinYiu/yolov7/tree/u5
-2. Using this command to convert:
-```
-export.py --weights yolov7.pt --include onnx --opset=16
-```
+![](img/yolocs.png)
 
-## Convert Custom yolov7 model to onnx
+### Bước 1: convert yolov7.pt thành yolov7.onnx
+Vào folder yolov7-u5, đọc và làm theo file readme để convert file
 
-1. Clone code from: https://github.com/WongKinYiu/yolov7/tree/u5
-2. Copy file from yolov7/cfg/deploy/yolov7.yaml to yolov7-u5\cfg\deploy\yolov7_custom_weight.yaml
-3. Download file https://github.com/majnas/yolov7_opencv_cpp/blob/master/reparameterization_yolov7.py to yolov7-u5\reparameterization_yolov7.py
-4. Edit file reparameterization_yolov7.py, edit nc (num_class)
-5. Copy best.pt to yolov7-u5\cfg\training\custom_weight.pt
-6. Run file reparameterization_yolov7.py, result is yolov7-u5\cfg\deploy\custom_weight_reparameterized.pt
-7. Export to onnx
-```
-python export.py --weights cfg/deploy/custom_weight_reparameterized.pt --topk-all 100 --iou-thres 0.65 --conf-thres 0.35 --img-size 640 640
-```
-8. Result is custom_weight_reparameterized.onnx
+### Bước 2: build Example_YOLOv7_cs_CV480_x64.sln 
+Cài đặt Visual Studio 2017 trở lên và phải cài đặt C++ Development.
+
+Sau đó vào folder ExampleYOLOcs, build Example_YOLOv7_cs_CV480_x64.sln , lưu ý chỉ có mode x64.
 
 
-Reference: https://github.com/majnas/yolov7_opencv_cpp/tree/master
+### Bước 3: load file onnx và names
+Trong folder ExampleYOLOcs\bin có commit sẵn 2 file:
+- yolov7-tiny.onnx convert từ yolov7-tiny.pt
+- coco.names chứa 80 class CoCo
+
+Load 2 file onnx và names, sau đó chọn ảnh để predict.
+
+## Giải thích source code
+
+Module DLL được đóng gói sẵn với giải thuật được viết bằng OpenCV DNN C++. Đây là example, dùng cho các bạn test nhanh hoặc test các model tiny, muốn nhanh thì phải build bản GPU (vui lòng liên hệ phone/zalo 0939.825.125).
+
+Các bạn cần khởi tạo biến YOLOcs, sau đó load 2 file onnx và file names (chứa các class). Khi predict 1 hình ảnh bạn sẽ được YOLOresult, object này có:
+- Danh sách các object, mỗi object có rectangle, class ID và class name.
+- Ảnh bitmap kết quả
+- Thời gian thực thi
+
+Source code có sử dụng background worker để detect ở 1 thread riêng do thời gian thực thi lâu. Đây cũng là 1 ví dụ dễ hiểu về background thread mà các bạn sinh viên nên áp dụng nếu có những function thực thi lâu.
+
+Bài viết chi tiết: https://thigiacmaytinh.com/huong-dan-detect-object-bang-yolov7-tren-windows-form-c
