@@ -31,7 +31,7 @@ namespace ExampleYOLOv7
 
             TGMTregistry.GetInstance().Init("YOLOcs");
             txt_weightPath.Text = TGMTregistry.GetInstance().ReadString("txt_weightPath");
-            txt_classesPath.Text = TGMTregistry.GetInstance().ReadString("txt_classesPath");           
+            txt_classesPath.Text = TGMTregistry.GetInstance().ReadString("txt_classesPath");
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ namespace ExampleYOLOv7
 
         private void bg_loadModel_DoWork(object sender, DoWorkEventArgs e)
         {
-            yolo = new YOLOcs(txt_weightPath.Text, txt_classesPath.Text);
+            yolo = new YOLOcs(txt_weightPath.Text, txt_classesPath.Text, (int)txt_inputWidth.Value, (int)txt_inputHeight.Value);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////

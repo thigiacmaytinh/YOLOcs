@@ -6,7 +6,7 @@ from utils.torch_utils import select_device, is_parallel
 import yaml
 
 
-inputWeight = 'cfg/training/custom_weight.pt'
+inputWeight = 'cfg/training/best.pt'
 inputConfig = 'cfg/deploy/yolov7_custom_weight.yaml'
 outputWeight = 'cfg/deploy/custom_weight_reparameterized.pt'
 nc=4 # change this base on number of classes in your custom model
